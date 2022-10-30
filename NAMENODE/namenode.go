@@ -177,12 +177,11 @@ type server struct {
 func (s *server) Intercambio(ctx context.Context, msg *pb.Message) (*pb.Message, error) {
 	msn := ""
 
-	file, err := os.Create("DATA.txt")
+	file, err := os.Open("DATA.txt")
 
 	if err != nil {
 		log.Fatalf("failed creating file: %s", err)
 	}
-	defer file.Close()
 
 	Split_Msj := strings.Split(msg.Body, ":")
 	ID := Split_Msj[2]
@@ -201,10 +200,19 @@ func (s *server) Intercambio(ctx context.Context, msg *pb.Message) (*pb.Message,
 		msn = Fetch_Rebeldes(Split_Msj[1])
 	}
 
+	file.Close()
+
 	return &pb.Message{Body: msn}, nil
 }
 
 func main() {
+
+	file, err := os.Create("DATA.txt")
+
+	if err != nil {
+		log.Fatalf("failed creating file: %s", err)
+	}
+	file.Close()
 
 	listener, err := net.Listen("tcp", ":50051") //conexion sincrona
 	if err != nil {
