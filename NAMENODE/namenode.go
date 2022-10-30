@@ -146,7 +146,7 @@ func GuardarDATA(data string) {
 	}
 
 	fmt.Println(res.Body)       //respuesta del laboratorio
-	time.Sleep(5 * time.Second) //espera de 5 segundos
+	time.Sleep(1 * time.Second) //espera de 5 segundos
 
 }
 
