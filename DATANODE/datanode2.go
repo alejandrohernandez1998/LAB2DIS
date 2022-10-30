@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"context"
+	"log"
 	"net"
 	"os"
 	"strings"
@@ -14,9 +15,16 @@ import (
 var file, err = os.Create("DATA.txt")
 
 func RetornarData(Tipo string) string {
+
+	file1, err1 := os.Open("DATA.txt")
+
+	if err1 != nil {
+		log.Fatalf("failed creating file: %s", err1)
+	}
+
 	StringRetorno := ""
 
-	scanner := bufio.NewScanner(file)
+	scanner := bufio.NewScanner(file1)
 
 	for scanner.Scan() {
 
@@ -29,6 +37,7 @@ func RetornarData(Tipo string) string {
 		}
 	}
 
+	file1.Close()
 	return StringRetorno
 }
 

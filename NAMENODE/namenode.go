@@ -19,21 +19,26 @@ var file, err = os.Create("DATA.txt")
 
 func RevisarID(ID string) bool {
 
-	if err != nil {
-		log.Fatalf("failed creating file: %s", err)
+	file1, err1 := os.Open("DATA.txt")
+
+	if err1 != nil {
+		log.Fatalf("failed creating file: %s", err1)
 	}
 
-	scanner := bufio.NewScanner(file)
+	scanner := bufio.NewScanner(file1)
 
 	for scanner.Scan() {
 
 		Split_Msj := strings.Split(scanner.Text(), ":")
+		println(Split_Msj[1], "----", ID)
 		if Split_Msj[1] == ID {
+
 			return false
 
 		}
 	}
 
+	file1.Close()
 	return true
 
 }
@@ -122,6 +127,8 @@ func Fetch_Rebeldes(tipo string) string {
 		panic("No se puede crear el mensaje " + err.Error())
 	}
 
+	println(res.Body)
+
 	Respuesta = Respuesta + res.Body
 
 	//CONEXION DATANODE 2
@@ -143,6 +150,8 @@ func Fetch_Rebeldes(tipo string) string {
 		panic("No se puede crear el mensaje " + err.Error())
 	}
 
+	println(res.Body)
+
 	Respuesta = Respuesta + res.Body
 
 	//CONEXION DATANODE 3
@@ -162,6 +171,8 @@ func Fetch_Rebeldes(tipo string) string {
 	if err != nil {
 		panic("No se puede crear el mensaje " + err.Error())
 	}
+
+	println(res.Body)
 
 	Respuesta = Respuesta + res.Body
 
