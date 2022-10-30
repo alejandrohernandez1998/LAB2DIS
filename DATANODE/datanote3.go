@@ -39,6 +39,8 @@ type server struct {
 
 func (s *server) Intercambio(ctx context.Context, msg *pb.Message) (*pb.Message, error) {
 
+	println(msg.Body)
+
 	msn := ""
 
 	Split_Msj := strings.Split(msg.Body, ":")

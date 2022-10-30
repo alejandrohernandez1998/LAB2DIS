@@ -173,14 +173,14 @@ type server struct {
 }
 
 func (s *server) Intercambio(ctx context.Context, msg *pb.Message) (*pb.Message, error) {
+	println(msg.Body)
 	msn := ""
-
 	Split_Msj := strings.Split(msg.Body, ":")
-	ID := Split_Msj[2]
-	Info := Split_Msj[1] + ":" + Split_Msj[2] + ":" + Split_Msj[3]
 
 	if Split_Msj[0] == "0" { //conbine
-		if RevisarID(ID) {
+		ID := Split_Msj[2]
+		Info := Split_Msj[1] + ":" + Split_Msj[2] + ":" + Split_Msj[3]
+		if RevisarID(ID) == true {
 			GuardarDATA(Info)
 			msn = "Guardado"
 
