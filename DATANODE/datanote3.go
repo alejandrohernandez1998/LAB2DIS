@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"context"
-	"log"
 	"net"
 	"os"
 	"strings"
@@ -12,12 +11,9 @@ import (
 	"google.golang.org/grpc"
 )
 
-func RetornarData(Tipo string) string {
-	file, err := os.Open("DATA.txt")
+var file, err = os.Create("DATA.txt")
 
-	if err != nil {
-		log.Fatalf("failed creating file: %s", err)
-	}
+func RetornarData(Tipo string) string {
 
 	StringRetorno := ""
 
@@ -34,7 +30,6 @@ func RetornarData(Tipo string) string {
 		}
 	}
 
-	file.Close()
 	return StringRetorno
 }
 
@@ -43,11 +38,6 @@ type server struct {
 }
 
 func (s *server) Intercambio(ctx context.Context, msg *pb.Message) (*pb.Message, error) {
-	file, err := os.Create("DATA.txt")
-	if err != nil {
-		log.Fatalf("failed creating file: %s", err)
-	}
-	defer file.Close()
 
 	msn := ""
 
@@ -75,6 +65,7 @@ func main() {
 		panic("La conexion no se pudo crear" + err.Error())
 	}
 
+	defer file.Close()
 	serv := grpc.NewServer()
 	for {
 		pb.RegisterMessageServiceServer(serv, &server{})

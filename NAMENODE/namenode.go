@@ -15,8 +15,9 @@ import (
 	"google.golang.org/grpc"
 )
 
+var file, err = os.Create("DATA.txt")
+
 func RevisarID(ID string) bool {
-	file, err := os.Open("DATA.txt")
 
 	if err != nil {
 		log.Fatalf("failed creating file: %s", err)
@@ -28,14 +29,11 @@ func RevisarID(ID string) bool {
 
 		Split_Msj := strings.Split(scanner.Text(), ":")
 		if Split_Msj[1] == ID {
-
-			file.Close()
 			return false
 
 		}
 	}
 
-	file.Close()
 	return true
 
 }
@@ -58,7 +56,7 @@ func DateNodeRandom() (Nombre_DateNode string, IP string) {
 	}
 }
 
-func GuardarDATA(data string, file *os.File) {
+func GuardarDATA(data string) {
 
 	Split_Msj := strings.Split(data, ":")
 	Tipo := Split_Msj[0]
@@ -177,19 +175,13 @@ type server struct {
 func (s *server) Intercambio(ctx context.Context, msg *pb.Message) (*pb.Message, error) {
 	msn := ""
 
-	file, err := os.Open("DATA.txt")
-
-	if err != nil {
-		log.Fatalf("failed creating file: %s", err)
-	}
-
 	Split_Msj := strings.Split(msg.Body, ":")
 	ID := Split_Msj[2]
 	Info := Split_Msj[1] + ":" + Split_Msj[2] + ":" + Split_Msj[3]
 
 	if Split_Msj[0] == "0" { //conbine
 		if RevisarID(ID) {
-			GuardarDATA(Info, file)
+			GuardarDATA(Info)
 			msn = "Guardado"
 
 		} else {
@@ -200,19 +192,12 @@ func (s *server) Intercambio(ctx context.Context, msg *pb.Message) (*pb.Message,
 		msn = Fetch_Rebeldes(Split_Msj[1])
 	}
 
-	file.Close()
-
 	return &pb.Message{Body: msn}, nil
 }
 
 func main() {
 
-	file, err := os.Create("DATA.txt")
-
-	if err != nil {
-		log.Fatalf("failed creating file: %s", err)
-	}
-	file.Close()
+	defer file.Close()
 
 	listener, err := net.Listen("tcp", ":50051") //conexion sincrona
 	if err != nil {
