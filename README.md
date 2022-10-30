@@ -3,7 +3,7 @@
 
 ### Integrantes
 
-   Félix Vargas - 201944526-K
+   Fénix Vargas - 201944526-K
    
    Alejandro Hernández - 201723540-3
 
