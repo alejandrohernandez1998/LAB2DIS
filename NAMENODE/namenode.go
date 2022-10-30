@@ -17,6 +17,50 @@ import (
 
 var file, err = os.Create("DATA.txt")
 
+func Ordenar(texto string, tipo string) string {
+	file1, err1 := os.Open("DATA.txt")
+
+	if err1 != nil {
+		log.Fatalf("failed creating file: %s", err1)
+	}
+
+	Split_Msj := strings.Split(texto, "\n")
+
+	var lista []string
+
+	scanner := bufio.NewScanner(file1)
+
+	for scanner.Scan() {
+
+		Split_Msj1 := strings.Split(scanner.Text(), ":")
+
+		if Split_Msj1[0] == tipo {
+			lista = append(lista, Split_Msj1[1])
+		}
+	}
+
+	resultado := ""
+
+	n := len(lista)
+	m := len(Split_Msj)
+
+	for i := 0; i < n; i++ {
+
+		for p := 0; p < m; p++ {
+
+			sp := strings.Split(Split_Msj[p], ":")
+			if lista[i] == sp[0] {
+				resultado = resultado + Split_Msj[p] + "\n"
+			}
+
+		}
+	}
+
+	file1.Close()
+
+	return resultado
+}
+
 func RevisarID(ID string) bool {
 
 	file1, err1 := os.Open("DATA.txt")
@@ -176,7 +220,9 @@ func Fetch_Rebeldes(tipo string) string {
 
 	Respuesta = Respuesta + res.Body
 
-	return Respuesta
+	RetornarString := Ordenar(Respuesta, tipo)
+
+	return RetornarString
 }
 
 type server struct {
