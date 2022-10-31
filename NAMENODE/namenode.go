@@ -171,8 +171,6 @@ func Fetch_Rebeldes(tipo string) string {
 		panic("No se puede crear el mensaje " + err.Error())
 	}
 
-	println(res.Body)
-
 	Respuesta = Respuesta + res.Body
 
 	//CONEXION DATANODE 2
@@ -194,8 +192,6 @@ func Fetch_Rebeldes(tipo string) string {
 		panic("No se puede crear el mensaje " + err.Error())
 	}
 
-	println(res.Body)
-
 	Respuesta = Respuesta + res.Body
 
 	//CONEXION DATANODE 3
@@ -216,8 +212,6 @@ func Fetch_Rebeldes(tipo string) string {
 		panic("No se puede crear el mensaje " + err.Error())
 	}
 
-	println(res.Body)
-
 	Respuesta = Respuesta + res.Body
 
 	RetornarString := Ordenar(Respuesta, tipo)
@@ -230,7 +224,7 @@ type server struct {
 }
 
 func (s *server) Intercambio(ctx context.Context, msg *pb.Message) (*pb.Message, error) {
-	println(msg.Body)
+
 	msn := ""
 	Split_Msj := strings.Split(msg.Body, ":")
 
@@ -239,14 +233,19 @@ func (s *server) Intercambio(ctx context.Context, msg *pb.Message) (*pb.Message,
 		Info := Split_Msj[1] + ":" + Split_Msj[2] + ":" + Split_Msj[3]
 		if RevisarID(ID) == true {
 			GuardarDATA(Info)
-			msn = "Guardado"
+			msn = "Mensaje enviado exitosamente"
 
 		} else {
 			msn = "ID Repetido"
 		}
 
+		println("Solicitud desde Combine recibida, mensaje enviado: " + msn)
+
 	} else { //rebelde
 		msn = Fetch_Rebeldes(Split_Msj[1])
+
+		println("Solicitud desde Rebelde pidiendo datos de " + Split_Msj[1] + ", mensaje enviado: " + msn)
+
 	}
 
 	return &pb.Message{Body: msn}, nil

@@ -47,19 +47,21 @@ type server struct {
 
 func (s *server) Intercambio(ctx context.Context, msg *pb.Message) (*pb.Message, error) {
 
-	println(msg.Body)
-
 	msn := ""
 
 	Split_Msj := strings.Split(msg.Body, ":")
 
 	if Split_Msj[0] == "1" {
 		msn = RetornarData(Split_Msj[1])
+		println("Solicitud de NameNode recibida, mensaje enviado:" + msn)
 
 	} else {
 
-		file.WriteString(Split_Msj[1] + ":" + Split_Msj[2] + ":" + Split_Msj[3] + "\n")
+		data := Split_Msj[1] + ":" + Split_Msj[2] + ":" + Split_Msj[3] + "\n"
+		file.WriteString(data)
 		msn = "Guardado"
+
+		println("Dato guardado: " + data)
 
 	}
 
