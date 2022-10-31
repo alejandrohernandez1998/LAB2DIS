@@ -74,7 +74,6 @@ func RevisarID(ID string) bool {
 	for scanner.Scan() {
 
 		Split_Msj := strings.Split(scanner.Text(), ":")
-		println(Split_Msj[1], "----", ID)
 		if Split_Msj[1] == ID {
 
 			return false
